@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:replace="Common/Css :: common_header(~{::title},~{::link})">
+<!-- 自定义CSS -->
+<link th:href="@{/statics/css/common.css?v=}+#{statics.vs}" rel="stylesheet">
+<link th:href="@{/statics/css/room/ChattingRoom.css?v=}+#{statics.vs}" rel="stylesheet">
+</head>
+<body>
+    <div id="wrapper">
+        <div class="content">
+            
+        </div>
+        <div id="input-box">
+            <textarea rows="5" cols=""></textarea>
+            <button th:text="#{common.send}" onclick="send()">发送</button>
+        </div>
+    </div>
+
+    <!-- 底部开始 -->
+    <!-- <div th:replace="Menu/Footer :: footer"></div> -->
+    <!-- 底部结束 -->
+    <input type="hidden" id="name" value="xunyi">
+    <input type="hidden" id="roomType" value="0">
+    <input type="hidden" id="roomId" value="1">
+
+    <div th:replace="Common/js::common_js(~{::script})">
+        <!-- 自定义JS -->
+        <script th:src="@{/statics/js/room/ChattingRoom.js?v=}+#{statics.vs}" type="text/javascript"></script>
+    </div>
+</body>
+</html>

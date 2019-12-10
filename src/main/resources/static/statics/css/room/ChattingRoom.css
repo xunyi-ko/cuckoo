@@ -1,0 +1,22 @@
+@charset "UTF-8";
+
+.box {
+	background-color: #fff;
+	width: 100%;
+}
+
+.name {
+	color: #000;
+	font-size: large;
+}
+
+.msg {
+	color: #333;
+	font-size: 14px;
+}
+
+#input-box {
+	bottom: 0;
+	position: fixed;
+	width: 100%;
+}

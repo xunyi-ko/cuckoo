@@ -1,0 +1,60 @@
+server:
+  port: 80
+  tomcat:
+    max-http-post-size: -1
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/cuckoo?characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
+    username: root
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+    # 初始化大小，最小，最大
+    initialSize: 10
+    minIdle: 10
+    maxActive: 50
+    # 获取连接等待超时的时间
+    maxWait: 60000
+    # 配置间隔多久才检测需要关闭的空闲连接，单位毫秒
+    timeBetweenEvictionRunsMillis: 60000
+    # 配置连接在池中最小生存的时间，单位毫秒
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    # 配置监控统计拦截的filters
+    filters: stat, wall
+    # 打开PSCache，并且指定每个连接上PSCache的大小
+    maxPoolPreparedStatementPerConnectionSize: 30
+    # 通过connectProperties属性来打开mergeSql功能, 慢SQL记录
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+    # 合并多个DruidDataSource的监控数据
+    useGlobalDataSourceStat: true
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    check-template-location: true
+    suffix: .html
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+    mode: LEGACYHTML5
+  jpa:
+    hibernate:
+      ddl-auto: update
+      show-sql: true
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
+  resources:
+    chain:
+      strategy:
+        content:
+          enabled: true
+          paths: /js/**,/css/**
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
