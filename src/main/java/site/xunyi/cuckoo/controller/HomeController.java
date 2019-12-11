@@ -14,7 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class HomeController extends AbstractController{
     @RequestMapping(value = {"/", "home"})
     public ModelAndView homePage(ModelAndView view) {
-        view.setViewName("room/ChattingRoom");
+        view.setViewName("Home");
         return view;
     }
 }

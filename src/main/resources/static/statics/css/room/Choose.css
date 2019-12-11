@@ -9,14 +9,3 @@
 	color: #000;
 	font-size: large;
 }
-
-.msg {
-	color: #333;
-	font-size: 14px;
-}
-
-#input-box {
-	bottom: 0;
-	position: fixed;
-	width: 100%;
-}

@@ -1,10 +1,6 @@
 var websocket;
 $(function(){
-    var roomType = $("#roomType").val();
-    if(roomType == 0){
-        // 加入房间(socket，第一类房间)
-        doWebsocket();
-    }
+    doWebsocket();
 })
 
 //websocket
@@ -14,7 +10,7 @@ function doWebsocket(){
 		if(top.location == self.location) { // && ($('.messageNum').length > 0 || $("#todoNum").length > 0)
 			
 			var host = window.location.host;
-			var socketUrl = "ws://" + window.location.host + "/room/" + $("#name").val() + "/" + $("#roomId").val();
+			var socketUrl = "ws://" + window.location.host + "/normal/" + $("#name").val() + "/" + $("#roomId").val();
 			websocket = new WebSocket(socketUrl);
 			
 			//连接错误
@@ -72,7 +68,7 @@ function doWebsocket(){
 
 //发送消息
 function send() {
-    var msg = $("textarea").val();
+    var msg = $("#msg").val();
     if(websocket.readyState == 1){
         websocket.send(msg);
     }
@@ -86,15 +82,19 @@ function receiveMsg(obj){
     }
     var str;
     if($("#name").val() == obj.name){
-        str = '<div class="box left">';
-        str += '<div class="right">';
+        str =  '<div class="box layui-row">';
+        str += '<div class="mine">';
+        str += '    <i class="layui-icon layui-icon-face-surprised icon"></i>';
+        str += '    <div class="msg">' + obj.msg + '</div>';
+        str += '</div></div>';
     }else{
-        str = '<div class="box right">';
-        str += '<div class="left">';
+        str = '<div class="box layui-row">';
+        str += '<div class="other">';
+        str += '    <i class="layui-icon layui-icon-face-surprised icon"></i>';
+        str += '    <div class="name">' + obj.name + '</div><br>';
+        str += '    <div class="msg">' + obj.msg + '</div>';
+        str += '</div></div>';
     }
-    str += '<div class="name">' + obj.name + '</div>';
-    str += '<div class="msg">' + obj.msg + '</div>';
-    str += '</div></div>';
     
     $(".content").append(str);
 }

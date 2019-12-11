@@ -1,10 +1,3 @@
-/**   
- * @Title: ShiroConfig.java
- * @Package com.ypkj.boss.shiro
- * @Description: shiro配置Bean类
- * @date 2019年8月19日
- * @Copyright (c) 2019, 杭州映派科技有限公司 All Rights Reserved.
- */
 package site.xunyi.cuckoo.shiro;
 
 import java.util.LinkedHashMap;
@@ -30,12 +23,6 @@ import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import net.sf.ehcache.CacheManager;
 
-/**
- * @ClassName: ShiroConfig
- * @author chen
- * @date 2019年8月19日
- * @version 1.0.0
- */
 //@Configuration
 public class ShiroConfig {
 

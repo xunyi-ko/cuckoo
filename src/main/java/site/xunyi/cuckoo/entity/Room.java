@@ -1,5 +1,10 @@
 /**
  * 聊天室房间信息
+ * 
+ * 暂定有三种
+ *  1.只能看到进入聊天室后产生的信息
+ *  2.能看到加入聊天室后产生的信息，但是看过一次后，下次进入不会再看到
+ *  3.可以看到加入聊天室后的一切信息（有时间限制）
  */
 package site.xunyi.cuckoo.entity;
 
@@ -94,5 +99,54 @@ public class Room {
 
     public void setOwner(Long owner) {
         this.owner = owner;
+    }
+    
+    /**
+     * 房间类型
+     * @author xunyi
+     */
+    public enum RoomType{
+        /**
+         * 第一类房间，普通房，用socket发送和接收消息。
+         * 类似于直播间的模式，只有在房间时才能接收到消息
+         */
+        NORMAL(0, "直播间", "normal"),
+        
+        /**
+         * 第二类房间，交流群，类似qq群或微信群，但是不会有历史消息
+         */
+        MQ(1, "交流群", "messageQueue")
+        ;
+        
+        /**
+         * 房间类型编号
+         */
+        private int value;
+        /**
+         * 房间类型名称
+         */
+        private String name;
+        /**
+         * 进入房间调用的方法名
+         */
+        private String methodName;
+        
+        RoomType(int value, String name, String methodName){
+            this.value = value;
+            this.name = name;
+            this.methodName = methodName;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        public String getName() {
+            return name;
+        }
+        
+        public String getMethodName() {
+            return methodName;
+        }
     }
 }

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:replace="Common/Css :: common_header(null,~{::link})">
+    <!-- 自定义CSS -->
+    <link th:href="@{/statics/css/common.css?v=}+#{statics.vs}" rel="stylesheet">
+    <link th:href="@{/statics/css/room/Choose.css?v=}+#{statics.vs}" rel="stylesheet">
+</head>
+<body>
+    <div id="wrapper" class="layui-form">
+        <div class="param">
+            <label for="roomId" class="require layui-form-label" th:text="#{room.roomName}">房间名</label>
+            <div class="layui-input-block">
+                <input class="layui-input" maxlength="20" type="text" id="roomId">
+            </div>
+        </div>
+        <div class="param">
+            <label for="name" class="require layui-form-label" th:text="#{room.name}">用户名</label>
+            <div class="layui-input-block">
+                <input class="layui-input" maxlength="20" type="text" id="name">
+            </div>
+        </div>
+        <div class="param">
+            <label for="roomType" class="require layui-form-label" th:text="#{room.roomType}">房间类型</label>
+            <div class="layui-input-block">
+                <select id="roomType" class="layui-select">
+                    <option th:text="#{room.chooseRoomType}" th:value="''"></option>
+                    <option th:each="type:${types}" th:value="${type.value}" th:text="${type.name}"></option>
+                </select>
+            </div>
+        </div>
+        
+        <button class="layui-btn" th:text="#{common.entry}" onclick="entry()">发送</button>
+    </div>
+
+    <div th:replace="Common/js::common_js(~{::script})">
+        <!-- 自定义JS -->
+        <script th:src="@{/statics/js/common.js?v=}+#{statics.vs}"></script>
+        <script th:src="@{/statics/js/room/Choose.js?v=}+#{statics.vs}" type="text/javascript"></script>
+    </div>
+</body>
+</html>

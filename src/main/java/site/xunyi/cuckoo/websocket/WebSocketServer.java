@@ -1,10 +1,3 @@
-/**   
- * @Title: WebSocketServer.java
- * @Package com.ypkj.boss.websocketserver
- * @Description: Socket类
- * @date 2019年8月19日
- * @Copyright (c) 2019, 杭州映派科技有限公司 All Rights Reserved.
- */
 package site.xunyi.cuckoo.websocket;
 
 import java.io.IOException;
@@ -20,30 +13,21 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.alibaba.fastjson.JSONObject;
 
-/**
- * @ClassName: WebSocketServer
- * @author chen
- * @date 2019年8月19日
- * @version 1.0.0
- */
-@ServerEndpoint("/room/{name}/{roomId}")
+@ServerEndpoint("/normal/{name}/{roomId}")
 @Component
 public class WebSocketServer {
 	/**
 	 *  静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
 	 */
-	private static ConcurrentHashMap<Long, AtomicInteger> countMap = new ConcurrentHashMap<>();
+	private static ConcurrentHashMap<String, AtomicInteger> countMap = new ConcurrentHashMap<>();
 	/**
 	 *  concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。
 	 */
-	private static ConcurrentHashMap<Long, CopyOnWriteArraySet<Session>> socketMap = new ConcurrentHashMap<>();
+	private static ConcurrentHashMap<String, CopyOnWriteArraySet<Session>> socketMap = new ConcurrentHashMap<>();
 
 	/**
 	 * 存放名称
@@ -53,7 +37,7 @@ public class WebSocketServer {
 	/**
 	 * 存放房间id
 	 */
-	private static ConcurrentHashMap<String, Long> roomIdMap = new ConcurrentHashMap<>();
+	private static ConcurrentHashMap<String, String> roomIdMap = new ConcurrentHashMap<>();
 	/**
 	 *  与某个客户端的连接会话，需要通过它来给客户端发送数据
 	 */
@@ -63,7 +47,7 @@ public class WebSocketServer {
 	 * 连接建立成功调用的方法
 	 */
 	@OnOpen
-	public void onOpen(Session session, @PathParam("name") String name, @PathParam("roomId") Long roomId) {
+	public void onOpen(Session session, @PathParam("name") String name, @PathParam("roomId") String roomId) {
 		this.session = session;
 		
 		CopyOnWriteArraySet<Session> sessionSet = socketMap.get(roomId);
@@ -78,10 +62,7 @@ public class WebSocketServer {
 		sessionSet.add(session);
 		// 在线数加1
 		addOnlineCount(roomId);
-		try {
-			sendMessage(session, "连接成功", "");
-		} catch (IOException e) {
-		}
+		onMessage(name + "进入" + roomId + "房间", session);
 	}
 
 	/**
@@ -89,10 +70,13 @@ public class WebSocketServer {
 	 */
 	@OnClose
 	public void onClose() {
-	    Long roomId = roomIdMap.get(session.getId());
+	    String roomId = getRoomId();
 		// 从set中删除
 	    CopyOnWriteArraySet<Session> sessionSet = socketMap.get(roomId);
 	    sessionSet.remove(this.session);
+	    
+	    nameMap.remove(session.getId());
+	    roomIdMap.remove(session.getId());
 		// 在线数减1
 		subOnlineCount(roomId);
 	}
@@ -104,8 +88,8 @@ public class WebSocketServer {
 	 */
 	@OnMessage
 	public void onMessage(String message, Session session) {
-	    String name = nameMap.get(session.getId());
-	    Long roomId = roomIdMap.get(session.getId());
+	    String name = getName();
+	    String roomId = getRoomId();
 	    
 		// 群发消息
 		CopyOnWriteArraySet<Session> sessionSet = socketMap.get(roomId);
@@ -138,12 +122,12 @@ public class WebSocketServer {
 		session.getBasicRemote().sendText(json.toJSONString());
 	}
 
-	public static int getOnlineCount(Long roomId) {
+	public static int getOnlineCount(String roomId) {
         AtomicInteger onlineCount = countMap.get(roomId);
 		return onlineCount.get();
 	}
 
-	public static void addOnlineCount(Long roomId) {
+	public static void addOnlineCount(String roomId) {
 	    AtomicInteger onlineCount = countMap.get(roomId);
 	    if(onlineCount == null) {
 	        onlineCount = new AtomicInteger();
@@ -152,7 +136,7 @@ public class WebSocketServer {
 	    onlineCount.incrementAndGet();
 	}
 
-	public static void subOnlineCount(Long roomId) {
+	public static void subOnlineCount(String roomId) {
         AtomicInteger onlineCount = countMap.get(roomId);
         if(onlineCount == null) {
             onlineCount = new AtomicInteger();
@@ -161,7 +145,7 @@ public class WebSocketServer {
 		onlineCount.decrementAndGet();
 	}
 	
-	private Long getRoomId() {
+	private String getRoomId() {
 	    return roomIdMap.get(this.session.getId());
 	}
 	private String getName() {

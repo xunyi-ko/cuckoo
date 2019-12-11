@@ -8,13 +8,13 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-/**
- * @author xunyi
- */
 @SpringBootApplication(exclude={DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class})
 //@EnableAsync
 //@EnableScheduling
 //@EnableCaching
+/**
+ * @author xunyi
+ */
 public class App {
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);

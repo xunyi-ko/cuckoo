@@ -1,0 +1,18 @@
+@charset "UTF-8";
+
+.box{margin: 10px 0;}
+.mine{float: right;width: calc(100% - 30px);}
+.other{float: left;width: calc(100% - 30px);}
+.mine > *{float: right;}
+.other > *{float: left;}
+
+.icon{width: 30px;height: 30px;border-radius: 50%;}
+
+.name {color: #000;font-size: 13px;padding-left: 10px;}
+.mine .msg{background-color: #006cd0;}
+.other .msg{background-color: #fff;}
+.msg {color: #333;font-size: 14px;border-radius: 8px;padding: 10px;}
+
+#input-box {position: fixed;bottom: 0;left: 0;right: 0;}
+#input-box input{width: calc(100% - 80px); float: left;}
+#input-box button{width: 80px; float: left;}

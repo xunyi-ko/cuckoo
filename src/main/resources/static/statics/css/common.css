@@ -2,3 +2,38 @@
 
 .left{float: left;}
 .right{float: right;}
+
+.layui-form-label{width: 30%;float: left; text-align: right;align-items: center;margin-bottom: 0;position: relative;right: 15px;}
+.layui-input-block{width: 70%; float: left;height: 30px; line-height: 30px; margin-left: 0}
+
+.textcenter{text-align: center;}
+.textleft{text-align:left;}
+.textright{text-align:right;}
+.left{float:left}
+.right{float:right}
+
+.param{float: left;width:100%;margin: 12px 0;}
+.wrapper{
+	text-align: center;
+	margin: auto;
+	position: relative;
+}
+
+@media (min-width:1200px){
+	.wrapper{
+	   width: 1170px;
+	}
+}
+@media (min-width: 992px){
+	.wrapper {
+	    width: 970px;
+	}
+}
+@media (min-width: 768px){
+	.wrapper {
+	    width: 768px;
+	}
+}
+body{
+	background-color: #F5F6FA;
+}

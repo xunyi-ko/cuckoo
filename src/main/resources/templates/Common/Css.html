@@ -1,11 +1,16 @@
 <html xmlns:th="http://www.thymeleaf.org" th:fragment="common_header(title,links)">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title th:text="#{title}"></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=no">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <title th:if="${title == null}" th:text="#{title}"></title>
+    <th:block th:if="${title != null}">
+        <th:block th:replace="${title}"></th:block>
+    </th:block>
+    
     <link th:href="#{bootstrap.css.cdn}" rel="stylesheet">
     <link th:href="#{fontawsome.css.cdn}" rel="stylesheet">
     <link th:href="@{/statics/plugins/layui/css/layui.css?v=2.5.4}" rel="stylesheet" type="text/css" />
-
-    <script th:src="#{jquery.js.cdn}"></script>
-    <!--/* Per-page placeholder for additional links */-->
+    
     <th:block th:replace="${links}" />
 </html>
