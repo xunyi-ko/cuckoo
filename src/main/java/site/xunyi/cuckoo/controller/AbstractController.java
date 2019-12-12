@@ -20,6 +20,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import cn.hutool.core.exceptions.ValidateException;
 import site.xunyi.cuckoo.entity.Customer;
 
 /**
@@ -65,4 +66,8 @@ public abstract class AbstractController {
 		this.request = request;
 		this.response = response;
 	}
+	
+	protected void paramWrong() {
+	    throw new ValidateException(getMsg("common.paramWrong"));
+    }
 }

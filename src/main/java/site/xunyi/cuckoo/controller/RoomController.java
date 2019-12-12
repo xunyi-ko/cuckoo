@@ -45,7 +45,7 @@ public class RoomController extends AbstractController{
             }
         }
         if(type == null) {
-            throw new ValidateException(getMsg("common.paramWrong"));
+            paramWrong();
         }
         
         Method m = this.getClass().getMethod(type.getMethodName(), new Class[]{ModelAndView.class, String.class, String.class});
@@ -53,7 +53,7 @@ public class RoomController extends AbstractController{
     }
     
     /**
-     * 进入房间
+     * 进入普通房/直播间
      * @param view
      * @param roomId
      * @param name
@@ -65,6 +65,21 @@ public class RoomController extends AbstractController{
         view.addObject("name", name);
         
         view.setViewName("room/Normal");
+        return view;
+    }
+    
+    /**
+     * 个人的群聊页面
+     * @param view
+     * @param roomId
+     * @param name
+     * @return
+     */
+    @RequestMapping("/group")
+    public ModelAndView group(ModelAndView view, String roomId, String name) {
+        
+        
+        view.setViewName("room/Group");
         return view;
     }
 }

@@ -115,7 +115,7 @@ public class Room {
         /**
          * 第二类房间，交流群，类似qq群或微信群，但是不会有历史消息
          */
-        MQ(1, "交流群", "messageQueue")
+        GROUP(1, "交流群", "group")
         ;
         
         /**

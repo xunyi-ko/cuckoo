@@ -17,6 +17,7 @@
 	text-align: center;
 	margin: auto;
 	position: relative;
+	padding: 0 15px;
 }
 
 @media (min-width:1200px){

@@ -19,7 +19,7 @@ import com.alibaba.fastjson.JSONObject;
 
 @ServerEndpoint("/normal/{name}/{roomId}")
 @Component
-public class WebSocketServer {
+public class Normal {
 	/**
 	 *  静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
 	 */
