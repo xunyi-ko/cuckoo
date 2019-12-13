@@ -17,12 +17,19 @@ import site.xunyi.cuckoo.entity.Message;
  * @author xunyi
  */
 public class KafkaConsumerImpl implements KafkaConsumer<Message>{
-    private static final Properties prop;
+    private static final Properties prop = new Properties();
     private static final Duration DURATION = Duration.ofSeconds(1);
     
-    org.apache.kafka.clients.consumer.KafkaConsumer<String, Message> c = new org.apache.kafka.clients.consumer.KafkaConsumer<String, Message>(prop);
+    private String account;
+    org.apache.kafka.clients.consumer.KafkaConsumer<String, Message> c;
+    
+    public KafkaConsumerImpl(String account) {
+        this.account = account;
+        prop.put("client.id", account);
+        c = new org.apache.kafka.clients.consumer.KafkaConsumer<String, Message>(prop);
+    }
+    
     static {
-        prop = new Properties();
         prop.put("bootstrap.servers", "192.168.59.146:9092");
         prop.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         prop.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
@@ -45,5 +52,9 @@ public class KafkaConsumerImpl implements KafkaConsumer<Message>{
             });
         }
         return res;
+    }
+    
+    public String getAccount() {
+        return this.account;
     }
 }

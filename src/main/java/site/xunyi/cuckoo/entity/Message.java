@@ -14,6 +14,8 @@ public class Message {
     private String msg;
     
     private Date sendTime;
+    
+    private String account;
 
     public Long getId() {
         return id;
@@ -38,6 +40,12 @@ public class Message {
     public void setSendTime(Date sendTime) {
         this.sendTime = sendTime;
     }
-    
-    
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
 }

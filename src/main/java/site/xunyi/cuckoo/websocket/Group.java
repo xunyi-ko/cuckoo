@@ -5,11 +5,7 @@ package site.xunyi.cuckoo.websocket;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.websocket.OnClose;
@@ -25,11 +21,9 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
 
-import site.xunyi.cuckoo.entity.Customer;
 import site.xunyi.cuckoo.entity.Message;
-import site.xunyi.cuckoo.kafka.KafkaConsumerThread;
+import site.xunyi.cuckoo.kafka.KafkaConsumerTask;
 import site.xunyi.cuckoo.kafka.KafkaProducer;
-import site.xunyi.cuckoo.service.CustomerService;
 
 /**
  * @author xunyi
@@ -38,16 +32,12 @@ import site.xunyi.cuckoo.service.CustomerService;
 @Component
 public class Group {
     @Autowired
-    private CustomerService customerService;
-    
-    @Autowired
     private KafkaProducer kafkaProducer;
     
     /**
-     * 线程池
+     * 消费者任务
      */
-    private static ThreadPoolExecutor pool = new ThreadPoolExecutor(8, 60, 1000, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(20));
-    
+    private KafkaConsumerTask task = new KafkaConsumerTask();
     /**
      * 有多少用户在登录状态
      */
@@ -55,22 +45,7 @@ public class Group {
     /**
      * 登录用户的socketSession
      */
-    private static CopyOnWriteArraySet<Session> set = new CopyOnWriteArraySet<>();
-    
-    /**
-     *  与某个客户端的连接会话，需要通过它来给客户端发送数据
-     */
-    private Session session;
-    
-    /**
-     * 根据唯一编号建立的映射，存放昵称
-     */
-    private static ConcurrentHashMap<String, String> names = new ConcurrentHashMap<>();
-    
-    /**
-     * 消费者线程
-     */
-    private static ConcurrentHashMap<String, KafkaConsumerThread> threads = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<String, Session> map = new ConcurrentHashMap<>();
     
     /**
      * 登录用户的唯一编号
@@ -82,20 +57,13 @@ public class Group {
      */
     @OnOpen
     public void onOpen(Session session, @PathParam("guid") String guid) {
-        this.session = session;
         this.guid = guid;
         
-        Customer custom = customerService.findByLogin(guid);
-        names.put(guid, custom.getName());
-        set.add(session);
+        map.put(guid, session);
         
         // 在线数加1
         addOnlineCount();
-        
-        //TODO
-        KafkaConsumerThread runnable = new KafkaConsumerThread();
-        pool.execute(runnable);
-        threads.put(guid, runnable);
+        task.addConsumer(guid);
     }
 
     /**
@@ -103,13 +71,10 @@ public class Group {
      */
     @OnClose
     public void onClose() {
-        set.remove(this.session);
-        names.remove(this.guid);
+        map.remove(this.guid);
         
         // 结束消费者线程
-        KafkaConsumerThread runnable = threads.remove(this.guid);
-        runnable.stop();
-        pool.remove(runnable);
+        task.removeConsumer(guid);
         
         // 在线数减1
         subOnlineCount();
@@ -145,11 +110,9 @@ public class Group {
     /**
      * 实现服务器主动推送
      */
-    public void sendMessage(Session session, String message, String name) throws IOException {
-        JSONObject json = new JSONObject();
-        json.put("name", name);
-        json.put("msg", message);
-        session.getBasicRemote().sendText(json.toJSONString());
+    public static void sendMessage(Message message) throws IOException {
+        Session session = map.get(message.getAccount());
+        session.getBasicRemote().sendText(JSONObject.toJSONString(message));
     }
 
     public static int getOnlineCount(String roomId) {
