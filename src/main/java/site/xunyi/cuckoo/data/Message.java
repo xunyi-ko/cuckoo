@@ -1,7 +1,7 @@
 /**
  * 
  */
-package site.xunyi.cuckoo.entity;
+package site.xunyi.cuckoo.data;
 
 import java.util.Date;
 
@@ -16,6 +16,12 @@ public class Message {
     private Date sendTime;
     
     private String account;
+    
+    private Integer type;
+    
+    private String roomName;
+    
+    private String roomGuid;
 
     public Long getId() {
         return id;
@@ -47,5 +53,34 @@ public class Message {
 
     public void setAccount(String account) {
         this.account = account;
+    }
+    
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+
+    public String getRoomGuid() {
+        return roomGuid;
+    }
+
+    public void setRoomGuid(String roomGuid) {
+        this.roomGuid = roomGuid;
+    }
+
+    public enum Type{
+        CREATE_ROOM,
+        MESSAGE;
     }
 }

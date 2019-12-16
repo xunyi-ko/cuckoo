@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadFactory;
@@ -16,8 +15,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
-import site.xunyi.cuckoo.entity.Customer;
-import site.xunyi.cuckoo.entity.Message;
+import site.xunyi.cuckoo.data.Message;
 import site.xunyi.cuckoo.websocket.Group;
 
 /**
@@ -27,7 +25,7 @@ public class KafkaConsumerTask{
     /**
      * 线程池
      */
-    private static ThreadFactory factory = new ThreadFactory() {
+    private ThreadFactory factory = new ThreadFactory() {
         private final AtomicInteger threadNumber = new AtomicInteger(1);
         @Override
         public Thread newThread(Runnable r) {
@@ -44,7 +42,7 @@ public class KafkaConsumerTask{
         }
     };
     
-    private static ThreadPoolExecutor pool = new ThreadPoolExecutor(8, 160, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(100), factory);
+    private ThreadPoolExecutor pool = new ThreadPoolExecutor(8, 160, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(100), factory);
     private List<KafkaConsumerThread> threadList = new ArrayList<>();
     
     private final Object ONLINE = new Object();
@@ -57,7 +55,6 @@ public class KafkaConsumerTask{
      * 添加消费者
      * @param guid
      */
-    // TODO
     public void addConsumer(String guid) {
         // 检查线程内消费者数量
         checkThread();
@@ -66,7 +63,8 @@ public class KafkaConsumerTask{
         KafkaConsumerThread thread = getMinCustomerThread();
         thread.lock.lock();
         
-        
+        KafkaConsumerImpl consumer = new KafkaConsumerImpl(guid);
+        thread.customers.add(consumer);
         
         customerNet.put(guid, ONLINE);
         thread.lock.unlock();
@@ -105,6 +103,7 @@ public class KafkaConsumerTask{
     
     private class KafkaConsumerThread implements Runnable{
         private List<KafkaConsumerImpl> customers = new ArrayList<>();
+        private Map<String, List<String>> consumerTopics = new ConcurrentHashMap<>();
         private ReentrantLock lock = new ReentrantLock();
         
         private boolean isStop = false;
@@ -118,14 +117,15 @@ public class KafkaConsumerTask{
                     while(iterator.hasNext()) {
                         KafkaConsumerImpl consumer = iterator.next();
                         if(customerNet.get(consumer.getAccount()) == ONLINE) {
-                            Message message = new Message();
-                            Group.sendMessage(message);
+                            List<Message> messages = consumer.receive(consumerTopics.get(consumer.getAccount()));
+                            for(Message message : messages) {
+                                Group.sendMessage(message);
+                            }
                         }else {
                             iterator.remove();
+                            consumerTopics.remove(consumer.getAccount());
                         }
                     }
-                    
-                    
                 }catch (Exception e) {
                 }finally {
                     lock.unlock();

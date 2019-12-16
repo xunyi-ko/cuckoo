@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import cn.hutool.core.exceptions.ValidateException;
 import cn.hutool.core.lang.Validator;
 import site.xunyi.cuckoo.entity.Room.RoomType;
 

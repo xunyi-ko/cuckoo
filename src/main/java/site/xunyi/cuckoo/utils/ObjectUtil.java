@@ -5,8 +5,12 @@ package site.xunyi.cuckoo.utils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
+
+import com.alibaba.fastjson.JSONObject;
 
 /**
  * @author xunyi
@@ -26,7 +30,6 @@ public class ObjectUtil {
         @SuppressWarnings("unchecked")
         Class<T> clazz = (Class<T>) object.getClass();
         Constructor<T> constructor = null;
-        
         try {
             constructor = clazz.getConstructor();
             T newInstance = constructor.newInstance();
@@ -69,10 +72,39 @@ public class ObjectUtil {
         if(objects == null) {
             return res;
         }
-        
         for(T object : objects) {
             res.add(clone(object, names));
         }
         return res;
+    }
+    
+    public static <T> T parseObject(JSONObject data, Class<T> clazz) {
+        Constructor<T> constructor = null;
+        T newInstance = null;
+        try {
+            constructor = clazz.getConstructor();
+            newInstance = constructor.newInstance();
+            
+            for(Entry<String, Object> param : data.entrySet()) {
+                try {
+                    Field field = clazz.getField(param.getKey());
+                    field.set(newInstance, param.getValue());
+                } catch (NoSuchFieldException e) {
+                }
+            }
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return newInstance;
     }
 }

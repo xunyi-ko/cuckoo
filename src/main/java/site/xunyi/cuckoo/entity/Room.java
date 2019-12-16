@@ -21,6 +21,11 @@ public class Room {
     private String name;
     
     /**
+     * 房间唯一编号
+     */
+    private String guid;
+    
+    /**
      * 密码
      */
     private String password;
@@ -43,7 +48,12 @@ public class Room {
     /**
      * 房主
      */
-    private Long owner;
+    private String owner;
+    
+    /**
+     * 房间类型
+     */
+    private Integer type;
 
     public Long getId() {
         return id;
@@ -93,14 +103,22 @@ public class Room {
         this.creater = creater;
     }
 
-    public Long getOwner() {
+    public String getOwner() {
         return owner;
     }
 
-    public void setOwner(Long owner) {
+    public void setOwner(String owner) {
         this.owner = owner;
     }
     
+    public String getGuid() {
+        return guid;
+    }
+
+    public void setGuid(String guid) {
+        this.guid = guid;
+    }
+
     /**
      * 房间类型
      * @author xunyi

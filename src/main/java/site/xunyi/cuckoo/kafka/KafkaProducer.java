@@ -3,7 +3,7 @@
  */
 package site.xunyi.cuckoo.kafka;
 
-import site.xunyi.cuckoo.entity.Message;
+import site.xunyi.cuckoo.data.Message;
 
 /**
  * @author xunyi

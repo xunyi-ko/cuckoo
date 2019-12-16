@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:replace="Common/Css :: common_header(~{::title},~{::link})">
+    <!-- 自定义CSS -->
+    <link th:href="@{/statics/css/style.css?v=}+#{statics.vs}" rel="stylesheet">
+    <link th:href="@{/statics/css/Cello/ImportUnionpay3.css?v=}+#{statics.vs}" rel="stylesheet">
+</head>
+<body class="fixed-sidebar full-height-layout gray-bg clear">
+    <div id="wrapper">
+       
+    </div>
+	<div th:replace="Common/js::common_js(~{::script})">
+        <!-- 自定义JS -->
+        <script th:src="@{/statics/js/app.js?v=}+#{statics.vs}"></script>
+        
+    </div>
+</body>
+</html>

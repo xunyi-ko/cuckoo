@@ -1,5 +1,6 @@
 package site.xunyi.cuckoo.utils;
 
+import java.util.Map;
 import java.util.Map.Entry;
 
 import com.alibaba.fastjson.JSONObject;
@@ -28,7 +29,7 @@ public class HttpUtil {
      * @param params
      * @return
      */
-    public static Result<JSONObject> get(String url, JSONObject params){
+    public static Result<JSONObject> get(String url, Map<String, Object> params){
         if(params != null) {
             StringBuilder sb = new StringBuilder(url);
             for(Entry<String, Object> e : params.entrySet()) {

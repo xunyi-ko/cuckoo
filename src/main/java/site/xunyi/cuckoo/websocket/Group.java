@@ -21,9 +21,14 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
 
-import site.xunyi.cuckoo.entity.Message;
+import site.xunyi.cuckoo.data.Message;
+import site.xunyi.cuckoo.data.Message.Type;
+import site.xunyi.cuckoo.entity.Room;
 import site.xunyi.cuckoo.kafka.KafkaConsumerTask;
 import site.xunyi.cuckoo.kafka.KafkaProducer;
+import site.xunyi.cuckoo.utils.GuidUtil;
+import site.xunyi.cuckoo.utils.ObjectUtil;
+import site.xunyi.cuckoo.utils.GuidUtil.EntityType;
 
 /**
  * @author xunyi
@@ -86,15 +91,20 @@ public class Group {
      */
     @OnMessage
     public void onMessage(String message, Session session) {
-        JSONObject json = JSONObject.parseObject(message);
+        Message m = JSONObject.parseObject(message, Message.class);
         
-        String msg = json.getString("msg");
-        String groupId = json.getString("groupId");
-        
-        Message m = new Message();
-        m.setMsg(msg);
-        m.setSendTime(new Date());
-        kafkaProducer.send(groupId, m);
+        if(m.getType() != null && m.getType() == Type.CREATE_ROOM.ordinal()) {
+            // 创建房间
+            Room room = new Room();
+            room.setGuid(GuidUtil.initGuid(EntityType.ROOM));
+            room.setOwner(m.getAccount());
+            room.setName(m.getRoomName());
+            // TODO 保存房间
+            
+        }else {
+            // 发送消息
+            kafkaProducer.send(m.getRoomGuid(), m);
+        }
     }
 
     /**

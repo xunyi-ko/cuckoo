@@ -11,7 +11,7 @@ import java.util.Properties;
 
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 
-import site.xunyi.cuckoo.entity.Message;
+import site.xunyi.cuckoo.data.Message;
 
 /**
  * @author xunyi
@@ -34,10 +34,10 @@ public class KafkaConsumerImpl implements KafkaConsumer<Message>{
         prop.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         prop.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 //        prop.put("group.id","test_group4");
-        prop.put("client.id", "demo-consumer-client");
+//        prop.put("client.id", "demo-consumer-client");
         prop.put("auto.offset.reset", "earliest");
-        prop.put("enable.auto.commit", "true"); //默认为true自动提交
-        prop.put("auto.commit.interval.ms", "10000"); //设置默认自动提交时间 ，默认值为5000ms
+//        prop.put("enable.auto.commit", "true"); //默认为true自动提交
+//        prop.put("auto.commit.interval.ms", "10000"); //设置默认自动提交时间 ，默认值为5000ms
     }
     
     @Override
