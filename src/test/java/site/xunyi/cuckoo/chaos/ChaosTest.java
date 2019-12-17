@@ -3,24 +3,18 @@
  */
 package site.xunyi.cuckoo.chaos;
 
-import java.util.Date;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author xunyi
  */
 public class ChaosTest {
-    @Test
-    public void testIntegerMaxValueDate() {
-        System.out.println(new Date(Integer.MAX_VALUE * 1000L));
-    }
-    
     @Test
     public void testThreadPoolExecutor() {
         ThreadFactory factory = new ThreadFactory() {
@@ -39,9 +33,13 @@ public class ChaosTest {
                 return t;
             }
         };
-        
+        // 用这个构造方法，可以给线程命名
         ThreadPoolExecutor pool = new ThreadPoolExecutor(8, 160, 60, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(100), factory);
-        
-        
+    }
+    
+    @Test
+    public void testMath() {
+        System.out.println(Math.round(11.5));// 12
+        System.out.println(Math.round(-11.5));// -11
     }
 }

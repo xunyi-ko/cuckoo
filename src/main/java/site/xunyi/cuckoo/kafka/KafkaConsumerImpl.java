@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.springframework.beans.factory.annotation.Value;
 
 import site.xunyi.cuckoo.data.Message;
 
@@ -17,27 +18,62 @@ import site.xunyi.cuckoo.data.Message;
  * @author xunyi
  */
 public class KafkaConsumerImpl implements KafkaConsumer<Message>{
-    private static final Properties prop = new Properties();
+    private final Properties prop = new Properties();
     private static final Duration DURATION = Duration.ofSeconds(1);
     
+    /**
+     * kafka的ip/端口号
+     */
+    private static String bootstrapServers;
+    /**
+     * key的反序列化方式
+     */
+    private static String keyDeserializer;
+    /**
+     * value的反序列化方式
+     */
+    private static String valueDeserializer;
+    /**
+     * 自动重置偏移量的策略
+     */
+    private static String autoOffsetReset;
+    
+    @Value(value = "${spring.kafka.bootstrap-servers}")
+    public void setBootstrapServers(String bootstrapServers) {
+        KafkaConsumerImpl.bootstrapServers = bootstrapServers;
+    }
+
+    @Value(value = "${spring.kafka.consumer.key-deserializer}")
+    public void setKeyDeserializer(String keyDeserializer) {
+        KafkaConsumerImpl.keyDeserializer = keyDeserializer;
+    }
+
+    @Value(value = "${spring.kafka.consumer.value-deserializer}")
+    public void setValueDeserializer(String valueDeserializer) {
+        KafkaConsumerImpl.valueDeserializer = valueDeserializer;
+    }
+
+    @Value(value = "${spring.kafka.consumer.auto-offset-reset}")
+    public void setAutoOffsetReset(String autoOffsetReset) {
+        KafkaConsumerImpl.autoOffsetReset = autoOffsetReset;
+    }
+
     private String account;
     org.apache.kafka.clients.consumer.KafkaConsumer<String, Message> c;
     
     public KafkaConsumerImpl(String account) {
         this.account = account;
-        prop.put("client.id", account);
-        c = new org.apache.kafka.clients.consumer.KafkaConsumer<String, Message>(prop);
-    }
-    
-    static {
-        prop.put("bootstrap.servers", "192.168.59.146:9092");
-        prop.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-        prop.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+        
+        prop.put("bootstrap.servers", bootstrapServers);
+        prop.put("key.deserializer", keyDeserializer);
+        prop.put("value.deserializer", valueDeserializer);
+        prop.put("auto.offset.reset", autoOffsetReset);
 //        prop.put("group.id","test_group4");
 //        prop.put("client.id", "demo-consumer-client");
-        prop.put("auto.offset.reset", "earliest");
 //        prop.put("enable.auto.commit", "true"); //默认为true自动提交
 //        prop.put("auto.commit.interval.ms", "10000"); //设置默认自动提交时间 ，默认值为5000ms
+        prop.put("client.id", account);
+        c = new org.apache.kafka.clients.consumer.KafkaConsumer<String, Message>(prop);
     }
     
     @Override
