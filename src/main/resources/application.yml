@@ -60,7 +60,15 @@ spring:
       FAIL_ON_EMPTY_BEANS: false
   kafka: 
     bootstrap-servers: 192.168.59.146:9092
-    
+    num:
+      partitions: 2
+    auto:
+      create:
+        topics:
+          enable: true
+    default: 
+      replication: 
+        factor: 3
     #=============== provider  =======================
     #spring.kafka.producer.retries=0
     # 每次批量发送消息的数量
@@ -71,11 +79,11 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
     consumer:
-      group-id: test-hello-group
+      #新消费者组从最近的消息开始消费
       auto-offset-reset: latest
+      #offset自动提交
       enable-auto-commit: true
       auto-commit-interval: 10
-      
       
       # 指定消息key和消息体的编解码方式
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer

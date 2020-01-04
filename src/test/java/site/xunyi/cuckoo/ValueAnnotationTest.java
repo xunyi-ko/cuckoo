@@ -56,6 +56,20 @@ public class ValueAnnotationTest {
     public void setAutoOffsetReset(String autoOffsetReset) {
         ValueAnnotationTest.autoOffsetReset = autoOffsetReset;
     }
-    
-    
+
+    public static String getBootstrapServers() {
+        return bootstrapServers;
+    }
+
+    public static String getKeyDeserializer() {
+        return keyDeserializer;
+    }
+
+    public static String getValueDeserializer() {
+        return valueDeserializer;
+    }
+
+    public static String getAutoOffsetReset() {
+        return autoOffsetReset;
+    }
 }

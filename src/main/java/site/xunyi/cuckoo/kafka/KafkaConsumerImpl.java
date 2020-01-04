@@ -59,6 +59,10 @@ public class KafkaConsumerImpl implements KafkaConsumer<Message>{
     }
 
     private String account;
+    public String getAccount() {
+        return this.account;
+    }
+    
     org.apache.kafka.clients.consumer.KafkaConsumer<String, Message> c;
     
     public KafkaConsumerImpl(String account) {
@@ -68,11 +72,9 @@ public class KafkaConsumerImpl implements KafkaConsumer<Message>{
         prop.put("key.deserializer", keyDeserializer);
         prop.put("value.deserializer", valueDeserializer);
         prop.put("auto.offset.reset", autoOffsetReset);
-//        prop.put("group.id","test_group4");
-//        prop.put("client.id", "demo-consumer-client");
+        prop.put("group.id",account);
 //        prop.put("enable.auto.commit", "true"); //默认为true自动提交
-//        prop.put("auto.commit.interval.ms", "10000"); //设置默认自动提交时间 ，默认值为5000ms
-        prop.put("client.id", account);
+//        prop.put("auto.commit.interval.ms", "500"); //设置默认自动提交时间 ，默认值为5000ms
         c = new org.apache.kafka.clients.consumer.KafkaConsumer<String, Message>(prop);
     }
     
@@ -88,9 +90,5 @@ public class KafkaConsumerImpl implements KafkaConsumer<Message>{
             });
         }
         return res;
-    }
-    
-    public String getAccount() {
-        return this.account;
     }
 }

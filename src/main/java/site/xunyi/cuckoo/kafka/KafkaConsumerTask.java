@@ -106,10 +106,10 @@ public class KafkaConsumerTask{
         private Map<String, List<String>> consumerTopics = new ConcurrentHashMap<>();
         private ReentrantLock lock = new ReentrantLock();
         
-        private boolean isStop = false;
+        private boolean stop = false;
         @Override
         public void run() {
-            while(!isStop) {
+            while(!stop) {
                 lock.lock();
                 
                 try {
@@ -139,8 +139,8 @@ public class KafkaConsumerTask{
             }
         }
         
-        public synchronized void stop() {
-            isStop = true;
+        private synchronized void stop() {
+            this.stop = true;
         }
     }
 }

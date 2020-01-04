@@ -4,7 +4,6 @@
 package site.xunyi.cuckoo.websocket;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -21,13 +20,14 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
 
+import kafka.admin.TopicCommand;
+import kafka.admin.TopicCommand;
 import site.xunyi.cuckoo.data.Message;
 import site.xunyi.cuckoo.data.Message.Type;
 import site.xunyi.cuckoo.entity.Room;
 import site.xunyi.cuckoo.kafka.KafkaConsumerTask;
 import site.xunyi.cuckoo.kafka.KafkaProducer;
 import site.xunyi.cuckoo.utils.GuidUtil;
-import site.xunyi.cuckoo.utils.ObjectUtil;
 import site.xunyi.cuckoo.utils.GuidUtil.EntityType;
 
 /**
@@ -99,8 +99,25 @@ public class Group {
             room.setGuid(GuidUtil.initGuid(EntityType.ROOM));
             room.setOwner(m.getAccount());
             room.setName(m.getRoomName());
+            
             // TODO 保存房间
             
+            
+            // 创建主题
+            TopicCommand.main(new String[] {
+                "--create", 
+                "--zookeeper","localhost:2181",
+                "--partitions", "1", 
+                "--topic", room.getGuid(),
+                "--replication-factor", "1" 
+            });
+            
+            // 房间创建成功，需要给页面反馈
+            try {
+                session.getBasicRemote().sendText("success");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }else {
             // 发送消息
             kafkaProducer.send(m.getRoomGuid(), m);
@@ -122,6 +139,9 @@ public class Group {
      */
     public static void sendMessage(Message message) throws IOException {
         Session session = map.get(message.getAccount());
+        if(session == null) {
+            return;
+        }
         session.getBasicRemote().sendText(JSONObject.toJSONString(message));
     }
 
