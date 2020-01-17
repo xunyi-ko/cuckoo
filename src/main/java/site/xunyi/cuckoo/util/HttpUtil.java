@@ -1,4 +1,4 @@
-package site.xunyi.cuckoo.utils;
+package site.xunyi.cuckoo.util;
 
 import java.util.Map;
 import java.util.Map.Entry;

@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import site.xunyi.cuckoo.shiro.ShiroUtils;
-import site.xunyi.cuckoo.utils.Result;
-import site.xunyi.cuckoo.utils.ResultUtil;
+import site.xunyi.cuckoo.util.Result;
+import site.xunyi.cuckoo.util.ResultUtil;
 
 /**
  * @ClassName: SysLoginController

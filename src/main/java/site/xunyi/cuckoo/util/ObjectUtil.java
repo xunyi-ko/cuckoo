@@ -1,7 +1,7 @@
 /**
  * 
  */
-package site.xunyi.cuckoo.utils;
+package site.xunyi.cuckoo.util;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;

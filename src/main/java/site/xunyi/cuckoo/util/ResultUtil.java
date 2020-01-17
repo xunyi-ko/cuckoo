@@ -1,4 +1,4 @@
-package site.xunyi.cuckoo.utils;
+package site.xunyi.cuckoo.util;
 
 import org.springframework.data.domain.Page;
 

@@ -63,7 +63,7 @@ public class KafkaConsumerImpl implements KafkaConsumer<Message>{
         return this.account;
     }
     
-    org.apache.kafka.clients.consumer.KafkaConsumer<String, Message> c;
+    org.apache.kafka.clients.consumer.KafkaConsumer<String, Message> consumer;
     
     public KafkaConsumerImpl(String account) {
         this.account = account;
@@ -75,13 +75,13 @@ public class KafkaConsumerImpl implements KafkaConsumer<Message>{
         prop.put("group.id",account);
 //        prop.put("enable.auto.commit", "true"); //默认为true自动提交
 //        prop.put("auto.commit.interval.ms", "500"); //设置默认自动提交时间 ，默认值为5000ms
-        c = new org.apache.kafka.clients.consumer.KafkaConsumer<String, Message>(prop);
+        consumer = new org.apache.kafka.clients.consumer.KafkaConsumer<String, Message>(prop);
     }
     
     @Override
     public List<Message> receive(Collection<String> topics) {
-        c.subscribe(topics);
-        ConsumerRecords<String, Message> records = c.poll(DURATION);
+        consumer.subscribe(topics);
+        ConsumerRecords<String, Message> records = consumer.poll(DURATION);
         
         List<Message> res = new ArrayList<>(records.count());
         if(!records.isEmpty()) {

@@ -27,8 +27,8 @@ import site.xunyi.cuckoo.data.Message.Type;
 import site.xunyi.cuckoo.entity.Room;
 import site.xunyi.cuckoo.kafka.KafkaConsumerTask;
 import site.xunyi.cuckoo.kafka.KafkaProducer;
-import site.xunyi.cuckoo.utils.GuidUtil;
-import site.xunyi.cuckoo.utils.GuidUtil.EntityType;
+import site.xunyi.cuckoo.util.GuidUtil;
+import site.xunyi.cuckoo.util.GuidUtil.EntityType;
 
 /**
  * @author xunyi

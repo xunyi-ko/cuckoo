@@ -127,6 +127,7 @@ public class KafkaConsumerTask{
                         }
                     }
                 }catch (Exception e) {
+                    e.printStackTrace();
                 }finally {
                     lock.unlock();
                 }

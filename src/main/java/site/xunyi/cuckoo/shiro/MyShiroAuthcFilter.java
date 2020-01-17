@@ -18,8 +18,8 @@ import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 
 import com.alibaba.fastjson.JSONObject;
 
-import site.xunyi.cuckoo.utils.Result;
-import site.xunyi.cuckoo.utils.ResultUtil;
+import site.xunyi.cuckoo.util.Result;
+import site.xunyi.cuckoo.util.ResultUtil;
 
 /**
  * @ClassName: MyShiroAuthcFilter

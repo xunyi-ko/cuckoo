@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import com.alibaba.fastjson.JSONObject;
 
-import site.xunyi.cuckoo.utils.IpUtil;
+import site.xunyi.cuckoo.util.IpUtil;
 
 /**
  * @author xunyi

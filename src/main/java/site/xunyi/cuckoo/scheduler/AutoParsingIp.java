@@ -9,8 +9,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import site.xunyi.cuckoo.encryption.Algorithms;
-import site.xunyi.cuckoo.utils.HttpUtil;
-import site.xunyi.cuckoo.utils.IpUtil;
+import site.xunyi.cuckoo.util.HttpUtil;
+import site.xunyi.cuckoo.util.IpUtil;
 
 /**
  * @author xunyi
